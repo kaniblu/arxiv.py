@@ -13,12 +13,15 @@ from requests.exceptions import HTTPError
 root_url = 'http://export.arxiv.org/api/'
 
 
-# TODO: Field queries ("Details of Query Construction")
-# TODO: Do I want to support boolean operators?
-# TODO: Do I want to add support for quotes to group words/order of ops?
-def query(s, prune=True, start=0, max_results=10):
+def query(s_all, prune=True, start=0, max_results=10, category=None, author=None):
+    s = "all:{}".format(s_all)
+    if category is not None:
+        s += " AND cat:{}".format(category)
+    if author is not None:
+        s += " AND au:{}".format(author)
+
     # Gets a list of top results, each of which is a dict
-    results = feedparser.parse(root_url + 'query?search_query=all:' + quote_plus(s) + '&start=' + str(start) + '&max_results=' + str(max_results))
+    results = feedparser.parse(root_url + 'query?search_query=' + quote_plus(s) + '&start=' + str(start) + '&max_results=' + str(max_results))
     if results.get('status') != 200:
         # TODO: better error reporting
         raise Exception("HTTP Error " + str(results.get('status', 'no status')) + " in query")
