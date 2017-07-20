@@ -13,8 +13,10 @@ from requests.exceptions import HTTPError
 root_url = 'http://export.arxiv.org/api/'
 
 
-def query(s_all, prune=True, start=0, max_results=10, category=None, author=None, title=None):
-    s = "all:{}".format(s_all)
+def query(s=None, prune=True, start=0, max_results=10, category=None, author=None, title=None):
+    s = ""
+    if s is not None:
+        s += "all:{}".format(s)
     if category is not None:
         s += " AND cat:{}".format(category)
     if author is not None:
