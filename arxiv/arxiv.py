@@ -14,17 +14,14 @@ root_url = 'http://export.arxiv.org/api/'
 
 
 def query(s=None, prune=True, start=0, max_results=10, category=None, author=None, title=None):
-    s = ""
-    if s is not None:
-        s += "all:{}".format(s)
-    if category is not None:
-        s += " AND cat:{}".format(category)
-    if author is not None:
-        s += " AND au:{}".format(author)
-
-    if title is not None:
-        s += " AND ti:{}".format(title)
-
+    params = {
+        "all": s,
+        "cat": category,
+        "au": author,
+        "ti": title
+    }
+    params = {k: v for k, v in params.items() if v is not None}
+    s = " AND ".join(":".join(kvp) for kvp in params.items())
     # Gets a list of top results, eastat.AP Statistics - Applications
     results = feedparser.parse(root_url + 'query?search_query=' + quote_plus(s) + '&start=' + str(start) + '&max_results=' + str(max_results))
     if results.get('status') != 200:
