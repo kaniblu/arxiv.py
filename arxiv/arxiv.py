@@ -23,7 +23,7 @@ def query(s=None, prune=True, start=0, max_results=10, category=None, author=Non
     params = {k: v for k, v in params.items() if v is not None}
     s = " AND ".join(":".join(kvp) for kvp in params.items())
     # Gets a list of top results, eastat.AP Statistics - Applications
-    results = feedparser.parse(root_url + 'query?search_query=' + quote_plus(s) + '&start=' + str(start) + '&max_results=' + str(max_results))
+    results = feedparser.parse(root_url + 'query?search_query=' + quote_plus(s) + '&start=' + str(start) + '&max_results=' + str(max_results) + '&sortBy=lastUpdatedDate&sortOrder=descending')
     if results.get('status') != 200:
         # TODO: better error reporting
         raise Exception("HTTP Error " + str(results.get('status', 'no status')) + " in query")
